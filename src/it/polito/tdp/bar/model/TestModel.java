@@ -1,0 +1,53 @@
+package it.polito.tdp.bar.model;
+
+import java.util.HashMap;
+
+public class TestModel {
+	
+	
+
+	public static void main(String[] args) {
+		
+	 HashMap<Integer,Tavolo> tavoli = new HashMap<Integer,Tavolo>();
+		
+		
+		tavoli.put(1,new Tavolo(10)); 
+		tavoli.put(2,new Tavolo(10)); 
+		tavoli.put(3,new Tavolo(8)); 
+		tavoli.put(4,new Tavolo(8)); 
+		tavoli.put(5,new Tavolo(8)); 
+		tavoli.put(6,new Tavolo(8)); 
+		tavoli.put(7,new Tavolo(6)); 
+		tavoli.put(8,new Tavolo(6)); 
+		tavoli.put(9,new Tavolo(6)); 
+		tavoli.put(10,new Tavolo(6)); 
+		tavoli.put(11,new Tavolo(4)); 
+		tavoli.put(12,new Tavolo(4)); 
+		tavoli.put(13,new Tavolo(4)); 
+		tavoli.put(14,new Tavolo(4)); 
+		tavoli.put(15,new Tavolo(4)); 		
+		
+		Statistiche stat = new Statistiche(tavoli) ;
+		
+		for(int i=0; i<100; i++) {
+			double tolleranza = Math.random();
+			int durata = (int)(60+Math.random()*61);
+			int numPersone = (int) (Math.random()*11);
+			int time = (int) (Math.random()*11);
+					
+			Gruppo g = new Gruppo ("Gruppo"+String.valueOf(i),numPersone,durata,tolleranza) ;
+			stat.addGruppo(g, 8*60+ time);
+		}
+		
+		stat.run();
+//		
+//		System.out.println("Treated:   " + sim.getPatientsTreated());
+//		System.out.println("Abandoned: " + sim.getPatientsAbandoned());
+//		System.out.println("Dead:      " + sim.getPatientsDead());
+//
+//
+//	}
+
+	}
+
+}
