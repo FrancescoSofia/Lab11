@@ -6,15 +6,15 @@ import it.polito.tdp.bar.model.Event.EventType;
 
 
 
+
 public class Statistiche {
 	
 //	private int NG; // numero gruppi (2000);
 	private Map<Integer,Tavolo> tavoli;
 	
 	
-	//private int TEMPO_AL_BAR =  
 	
-	private int tavoliOccupati = 0;
+	//private int TEMPO_AL_BAR =  
 	
 	private PriorityQueue<Event> queue;
 	
@@ -45,15 +45,25 @@ public class Statistiche {
 
 
 	public void addGruppo(Gruppo gruppo, int time) {
-		for(Tavolo t: tavoli.values()){
-			if(t.isFree()==true){
-			if(t.getPosti()==gruppo.getNumPersone()){
+		clientiTotali += gruppo.getNumPersone();
+		
+		double tolleranza = Math.random();
+		
+		Tavolo t = this.assegnaTavolo(gruppo);
+		if(t ==null){
+			if(gruppo.getTolleranza()>=tolleranza){
 				
+				clientiSoddisfatti += gruppo.getNumPersone();
 			}
-		}}
-		Tavolo tavolo = new Tavolo(10);
-		Event e = new Event(gruppo,tavolo,time,EventType.OUT) ;
-		queue.add(e) ;
+			else{
+				clientiInsoddisfatti += gruppo.getNumPersone();
+			}
+		}
+		else{
+			Event e = new Event(gruppo,t,time,EventType.OUT) ;
+			queue.add(e) ;
+		}
+		
 	}
 
 
@@ -61,7 +71,7 @@ public class Statistiche {
 		while (!queue.isEmpty()) {
 			Event e = queue.poll();
 			System.out.println(e);
-
+			
 			switch (e.getType()) {
 			case OUT:
 				processOutEvent(e);
@@ -71,16 +81,24 @@ public class Statistiche {
 	}
 	
 	private void processOutEvent(Event e) {
-		// TODO Auto-generated method stub
+		
+		e.getTavolo().setFree(true);
 		
 	}
-
-
-
 	
+	public Tavolo assegnaTavolo(Gruppo g){
+		int min = 0;
+		int tavolo = 0;
+		for(Tavolo t: tavoli.values()){
+			if(t.isFree()==true){
+			if( min<g.getNumPersone()/t.getPosti() && g.getNumPersone()/t.getPosti() >=0.5){
+				min = g.getNumPersone()/t.getPosti();
+				tavolo = t.getId();
+			}}}
+	if(tavolo!=0){
+		tavoli.get(tavolo).setFree(false);
+	}
+	return tavoli.get(tavolo);
+}
 	
-	
-	
-	
-
 }
